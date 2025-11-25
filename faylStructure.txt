@@ -1,0 +1,29 @@
+aqlli-talaba-bot/
+│
+├─ src/                        # Barcha TypeScript kodlar
+│  ├─ bot/                     # Botga oid modul va handlerlar
+│  │  ├─ commands/             # /start, /help, /about kabi komandalar
+│  │  │   ├─ start.ts
+│  │  │   ├─ help.ts
+│  │  │   └─ about.ts
+│  │  ├─ handlers/             # Foydalanuvchi xabarlarini ishlash
+│  │  │   ├─ messageHandler.ts
+│  │  │   └─ aiPresentationHandler.ts
+│  │  └─ bot.ts                # Botni ishga tushirish, polling
+│  │
+│  ├─ models/                  # MongoDB modellari
+│  │   └─ User.ts
+│  │
+│  ├─ services/                # AI va boshqa servislar
+│  │   ├─ aiService.ts         # AI API bilan ishlash
+│  │   └─ presentationService.ts # Prezentatsiya yaratish logikasi
+│  │
+│  ├─ utils/                   # Yordamchi funksiyalar
+│  │   └─ logger.ts
+│  │
+│  └─ index.ts                 # Loyihaning boshlang‘ich fayli
+│
+├─ .env                        # Token va Mongo URI
+├─ package.json
+├─ tsconfig.json
+└─ README.md
