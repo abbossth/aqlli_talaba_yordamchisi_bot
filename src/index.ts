@@ -1,14 +1,13 @@
-import 'dotenv/config';
-import TelegramBot from 'node-telegram-bot-api';
+// src/index.ts
+import 'dotenv/config';         // .env faylidan token va URI o'qish
 import mongoose from 'mongoose';
+import './bot/bot';
 
-const bot = new TelegramBot(process.env.BOT_TOKEN!, { polling: true });
+// MongoDB ga ulanish
+const mongoUri = process.env.MONGO_URI!;
+mongoose.connect(mongoUri)
+  .then(() => console.log('✅ MongoDB ga ulandi'))
+  .catch(err => console.error('❌ MongoDB xato:', err));
 
-mongoose.connect(process.env.MONGO_URI!)
-  .then(() => console.log('MongoDB ga ulandi'))
-  .catch(err => console.log('MongoDB xato:', err));
-
-bot.onText(/\/start/, (msg) => {
-  const chatId = msg.chat.id;
-  bot.sendMessage(chatId, `Salom ${msg.from?.first_name}! Men Aqlli Talaba Yordamchisi botiman 😊`);
-});
+console.log('🤖 Bot ishga tushdi...');
+// Bot allaqachon src/bot/bot.ts da yaratildi va eksport qilindi
