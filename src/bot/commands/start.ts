@@ -1,36 +1,30 @@
-// src/bot/commands/start.ts
 import TelegramBot from "node-telegram-bot-api";
 import User from "../../models/User";
+import { mainMenu } from "../keyboards/mainMenu";
 
 export default function startCommand(bot: TelegramBot) {
-  bot.onText(/\/start/, async (msg) => {
+  bot.onText(/\/start(?: (.+))?/, async (msg, match) => {
     const chatId = msg.chat.id;
-    const userId = msg.from?.id;
+    const userId = msg.from?.id!;
     const name = msg.from?.first_name || "Foydalanuvchi";
 
-    if (!userId) return;
+    const referralId = match?.[1] ? Number(match[1]) : null;
 
-    try {
-      const existing = await User.findOne({ telegramId: userId });
+    let user = await User.findOne({ telegramId: userId });
 
-      if (!existing) {
-        await User.create({
-          telegramId: userId,
-          name: name,
-        });
-      }
-
-      await bot.sendMessage(
-        chatId,
-        `👋 Salom, *${name}!*  
-Men *Aqlli Talaba Yordamchisi* botiman.
-
-🎯 Menga mavzu yuboring — men sizga *sun'iy intellekt yordamida prezentatsiya* tayyorlab beraman.`,
-        { parse_mode: "Markdown" }
-      );
-    } catch (err: unknown) {
-      console.error("Start command error:", err);
-      bot.sendMessage(chatId, "❌ Xatolik yuz berdi, keyinroq urinib ko‘ring.");
+    if (!user) {
+      user = await User.create({
+        telegramId: userId,
+        name,
+        referredBy: referralId || null,
+      });
     }
+
+    await bot.sendMessage(
+      chatId,
+      `👋 Salom *${name}!*  
+Aqlli Talaba Yordamchisi botiga xush kelibsiz.`,
+      { parse_mode: "Markdown", ...mainMenu }
+    );
   });
 }

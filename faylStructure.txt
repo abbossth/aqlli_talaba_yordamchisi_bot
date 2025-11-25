@@ -27,3 +27,29 @@ aqlli-talaba-bot/
 ├─ package.json
 ├─ tsconfig.json
 └─ README.md
+
+
+
+------------------------------------------------------------------
+
+src/
+ ├─ bot/
+ │   ├─ bot.ts
+ │   ├─ commands/
+ │   │     ├─ start.ts
+ │   │     ├─ help.ts
+ │   │     ├─ about.ts
+ │   │     ├─ chek.ts
+ │   │     └─ addBalance.ts
+ │   ├─ handlers/
+ │   │     ├─ messageHandler.ts
+ │   │     ├─ callbackHandler.ts
+ │   │     └─ photoHandler.ts
+ │   └─ keyboards/
+ │         └─ mainMenu.ts
+ ├─ models/
+ │    ├─ User.ts
+ │    └─ Payment.ts
+ ├─ services/
+ │    └─ balanceService.ts
+ └─ index.ts

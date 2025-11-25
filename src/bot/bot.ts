@@ -4,6 +4,10 @@ import startCommand from "./commands/start";
 import helpCommand from "./commands/help";
 import aboutCommand from "./commands/about";
 import messageHandler from "./handlers/messageHandler";
+import callbackHandler from "./handlers/callbackHandler";
+import photoHandler from "./handlers/photoHandler";
+import chekCommand from "./commands/chek";
+import addBalanceCommand from "./commands/addBalance";
 
 // Token borligini TypeScriptga aniq ko‘rsatamiz
 const botToken = process.env.BOT_TOKEN;
@@ -21,6 +25,8 @@ const bot = new TelegramBot(botToken, {
 startCommand(bot);
 helpCommand(bot);
 aboutCommand(bot);
+chekCommand(bot);
+addBalanceCommand(bot);
 
 // --- Oddiy xabarlarni handlerga yuboramiz ---
 bot.on("message", async (msg: Message) => {
@@ -30,6 +36,15 @@ bot.on("message", async (msg: Message) => {
   if (text && !text.startsWith("/")) {
     await messageHandler(bot, msg);
   }
+});
+
+// CALLBACK HANDLER
+bot.on("callback_query", async (query) => {
+  await callbackHandler(bot, query);
+});
+
+bot.on("photo", async (msg) => {
+  await photoHandler(bot, msg);
 });
 
 export default bot;

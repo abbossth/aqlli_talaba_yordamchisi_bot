@@ -1,15 +1,18 @@
-// src/models/User.ts
 import { Schema, model } from "mongoose";
 
-interface IUser {
+export interface IUser {
   telegramId: number;
   name: string;
+  balance: number;
+  referredBy?: number | null; // <-- fix
 }
 
 const userSchema = new Schema<IUser>(
   {
-    telegramId: { type: Number, required: true, unique: true },
+    telegramId: { type: Number, unique: true, required: true },
     name: { type: String, required: true },
+    balance: { type: Number, default: 0 },
+    referredBy: { type: Number, default: null } // <-- fix
   },
   { timestamps: true }
 );
