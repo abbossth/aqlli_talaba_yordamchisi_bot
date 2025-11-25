@@ -1,0 +1,24 @@
+{
+  "name": "aqlli_talaba_yordamchisi_bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "mongoose": "^9.0.0",
+    "node-telegram-bot-api": "^0.66.0"
+  },
+  "devDependencies": {
+    "@types/mongoose": "^5.11.97",
+    "@types/node": "^24.10.1",
+    "@types/node-telegram-bot-api": "^0.64.13",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}
