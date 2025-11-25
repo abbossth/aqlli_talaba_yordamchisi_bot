@@ -1,29 +1,37 @@
 import TelegramBot from "node-telegram-bot-api";
 import User from "../../models/User";
 import Payment from "../../models/Payment";
-
-const ADMIN_ID = +process.env.ADMIN_ID!; // ADMIN ID
+import { ADMIN_ID } from "../../config";
 
 export default function addBalanceCommand(bot: TelegramBot) {
   bot.onText(/\/addbalance (.+) (.+) (.+)/, async (msg, match) => {
-    if (msg.chat.id !== ADMIN_ID) return;
+    if (msg.chat.id !== ADMIN_ID)
+      return bot.sendMessage(msg.chat.id, "⛔ Siz admin emassiz.");
 
-    const userId = Number(match![1]);
+    const userChatId = Number(match![1]);
     const amount = Number(match![2]);
-    const payId = match![3];
+    const paymentId = match![3];
 
-    const user = await User.findOne({ telegramId: userId });
-    const payment = await Payment.findById(payId);
+    const user = await User.findOne({ telegramId: userChatId });
+    const pay = await Payment.findById(paymentId);
 
-    if (!user || !payment) return bot.sendMessage(ADMIN_ID, "Xatolik!");
+    if (!user || !pay)
+      return bot.sendMessage(
+        ADMIN_ID,
+        "❌ Foydalanuvchi yoki payment topilmadi."
+      );
 
     user.balance += amount;
     await user.save();
 
-    payment.status = "approved";
-    await payment.save();
+    pay.status = "approved";
+    pay.amount = amount;
+    await pay.save();
 
-    bot.sendMessage(ADMIN_ID, "✔️ Balans qo‘shildi.");
-    bot.sendMessage(userId, `🎉 Balansingizga +${amount} ball qo‘shildi!`);
+    bot.sendMessage(
+      ADMIN_ID,
+      `✔️ ${user.name} balansiga +${amount} qo‘shildi.`
+    );
+    bot.sendMessage(userChatId, `🎉 Balansingiz +${amount} ga oshdi!`);
   });
 }

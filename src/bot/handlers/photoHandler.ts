@@ -1,28 +1,45 @@
 import TelegramBot, { Message } from "node-telegram-bot-api";
 import User from "../../models/User";
 import Payment from "../../models/Payment";
-
-const ADMIN_ID = process.env.ADMIN_ID!; // ADMIN ID
+import { ADMIN_ID } from "../../config/index";
 
 export default async function photoHandler(bot: TelegramBot, msg: Message) {
-  const photo = msg.photo;
+  if (!msg.photo) return;
+
   const userId = msg.from!.id;
+  const chatId = msg.chat.id;
 
-  if (!photo) return;
-
-  const fileId = photo[photo.length - 1].file_id;
   const user = await User.findOne({ telegramId: userId });
+  if (!user) return;
 
-  const pay = await Payment.create({
+  const fileId = msg.photo[msg.photo.length - 1].file_id;
+
+  // Payment yaratamiz
+  const payment = await Payment.create({
     userId,
     fileId,
-    status: "pending"
+    status: "pending",
   });
 
-  await bot.sendMessage(msg.chat.id, "✅ Chek qabul qilindi, admin tasdiqlaydi.");
+  await bot.sendMessage(
+    chatId,
+    "✅ Chekingiz qabul qilindi. Admin tasdiqlashini kuting."
+  );
 
   await bot.sendPhoto(ADMIN_ID, fileId, {
-    caption: `🧾 *Yangi to‘lov cheki*\n\n👤 ${user!.name}\n🆔 ID: ${user!.telegramId}\nPayID: ${pay._id}`,
-    parse_mode: "Markdown"
+    caption: `🧾 *Yangi to‘lov cheki*  
+
+ID: ${payment._id}
+👤 ${user.name}
+🆔 Telegram ID: ${user.telegramId}
+
+👇 Quyidagilardan birini tanlang:`,
+    parse_mode: "Markdown",
+    reply_markup: {
+      inline_keyboard: [
+        [{ text: "✔️ Tasdiqlash", callback_data: `approve_${payment._id}` }],
+        [{ text: "❌ Bekor qilish", callback_data: `reject_${payment._id}` }],
+      ],
+    },
   });
 }
