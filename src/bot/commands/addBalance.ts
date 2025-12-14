@@ -2,6 +2,7 @@ import TelegramBot from "node-telegram-bot-api";
 import User from "../../models/User";
 import Payment from "../../models/Payment";
 import { ADMIN_ID } from "../../config";
+import { formatAmount } from "../../utils/formatter";
 
 export default function addBalanceCommand(bot: TelegramBot) {
   bot.onText(/\/addbalance (.+) (.+) (.+)/, async (msg, match) => {
@@ -30,8 +31,8 @@ export default function addBalanceCommand(bot: TelegramBot) {
 
     bot.sendMessage(
       ADMIN_ID,
-      `✔️ ${user.name} balansiga +${amount} qo‘shildi.`
+      `✔️ ${user.name} balansiga +${formatAmount(amount)} qo'shildi.`
     );
-    bot.sendMessage(userChatId, `🎉 Balansingiz +${amount} ga oshdi!`);
+    bot.sendMessage(userChatId, `🎉 Balansingiz +${formatAmount(amount)} ga oshdi!\n\n💰 Yangi balansingiz: ${formatAmount(user.balance)}`);
   });
 }

@@ -8,11 +8,13 @@ import callbackHandler from "./handlers/callbackHandler";
 import photoHandler from "./handlers/photoHandler";
 import chekCommand from "./commands/chek";
 import addBalanceCommand from "./commands/addBalance";
+import { logger } from "../utils/logger";
 
-// Token borligini TypeScriptga aniq ko‘rsatamiz
+// Token borligini TypeScriptga aniq ko'rsatamiz
 const botToken = process.env.BOT_TOKEN;
 
 if (!botToken) {
+  logger.error("BOT_TOKEN topilmadi. .env faylni tekshiring.");
   throw new Error("❌ BOT_TOKEN topilmadi. .env faylni tekshiring.");
 }
 

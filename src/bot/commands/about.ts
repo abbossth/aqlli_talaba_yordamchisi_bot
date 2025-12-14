@@ -13,7 +13,7 @@ export default function aboutCommand(bot: TelegramBot) {
 🤖 Sun'iy intellekt yordamida *prezentatsiyalar yaratadi*.  
 ⚡ Tez, qulay va bepul yordamchi!
 
-Developer: @Abbos`,
+Developer: @abbossth`,
       { parse_mode: "Markdown" }
     );
   });

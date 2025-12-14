@@ -15,7 +15,9 @@
   "dependencies": {
     "dotenv": "^17.2.3",
     "mongoose": "^9.0.0",
-    "node-telegram-bot-api": "^0.66.0"
+    "node-telegram-bot-api": "^0.66.0",
+    "openai": "^6.10.0",
+    "pptxgenjs": "^4.0.1"
   },
   "devDependencies": {
     "@types/mongoose": "^5.11.97",

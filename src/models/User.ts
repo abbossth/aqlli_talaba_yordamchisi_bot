@@ -4,7 +4,16 @@ export interface IUser {
   telegramId: number;
   name: string;
   balance: number;
-  referredBy?: number | null; // <-- fix
+  referredBy?: number | null;
+  action?: string;
+  // Presentation creation state
+  presentationState?: {
+    topic?: string;
+    author?: string;
+    pages?: number;
+    template?: number;
+    language?: string;
+  };
 }
 
 const userSchema = new Schema<IUser>(
@@ -12,7 +21,18 @@ const userSchema = new Schema<IUser>(
     telegramId: { type: Number, unique: true, required: true },
     name: { type: String, required: true },
     balance: { type: Number, default: 0 },
-    referredBy: { type: Number, default: null } // <-- fix
+    referredBy: { type: Number, default: null },
+    action: { type: String, default: "start" },
+    presentationState: {
+      type: {
+        topic: { type: String },
+        author: { type: String },
+        pages: { type: Number },
+        template: { type: Number },
+        language: { type: String },
+      },
+      default: {},
+    },
   },
   { timestamps: true }
 );

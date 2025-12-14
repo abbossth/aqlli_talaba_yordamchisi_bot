@@ -2,3 +2,5 @@
 /.env
 /.vscode
 /venv
+/temp
+/dist
