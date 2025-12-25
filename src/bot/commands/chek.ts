@@ -1,7 +1,7 @@
 import TelegramBot from "node-telegram-bot-api";
-import User from "../../models/User";
-import { mainMenu } from "../keyboards/mainMenu";
-import { formatAmount } from "../../utils/formatter";
+import User from "../../models/User.js";
+import { mainMenu } from "../keyboards/mainMenu.js";
+import { formatAmount } from "../../utils/formatter.js";
 
 const PAYMENT_AMOUNTS = [1000, 2000, 3000, 5000, 10000, 15000, 20000, 25000, 30000];
 

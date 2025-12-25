@@ -1,7 +1,7 @@
 // src/bot/commands/help.ts
 import TelegramBot from "node-telegram-bot-api";
-import { PRESENTATION_COST } from "../../config";
-import { formatAmount } from "../../utils/formatter";
+import { PRESENTATION_COST } from "../../config/index.js";
+import { formatAmount } from "../../utils/formatter.js";
 
 export default function helpCommand(bot: TelegramBot) {
   bot.onText(/\/help/, async (msg) => {

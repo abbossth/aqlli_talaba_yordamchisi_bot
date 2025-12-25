@@ -1,8 +1,8 @@
 // src/index.ts
 import 'dotenv/config';         // .env faylidan token va URI o'qish
 import mongoose from 'mongoose';
-import { logger } from './utils/logger';
-import './bot/bot';
+import { logger } from './utils/logger.js';
+import './bot/bot.js';
 
 // MongoDB ga ulanish
 const mongoUri = process.env.MONGO_URI!;

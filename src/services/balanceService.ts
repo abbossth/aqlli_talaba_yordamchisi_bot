@@ -1,4 +1,4 @@
-import User from "../models/User";
+import User from "../models/User.js";
 
 export async function deductBalance(telegramId: number, amount: number) {
   const user = await User.findOne({ telegramId });

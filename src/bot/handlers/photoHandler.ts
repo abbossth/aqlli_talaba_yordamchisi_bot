@@ -1,9 +1,9 @@
 import TelegramBot, { Message } from "node-telegram-bot-api";
-import User from "../../models/User";
-import Payment from "../../models/Payment";
-import { ADMIN_ID } from "../../config/index";
-import { logger } from "../../utils/logger";
-import { formatAmount } from "../../utils/formatter";
+import User from "../../models/User.js";
+import Payment from "../../models/Payment.js";
+import { ADMIN_ID } from "../../config/index.js";
+import { logger } from "../../utils/logger.js";
+import { formatAmount } from "../../utils/formatter.js";
 
 export default async function photoHandler(bot: TelegramBot, msg: Message) {
   if (!msg.photo) return;

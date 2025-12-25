@@ -1,14 +1,14 @@
 // src/bot/bot.ts
 import TelegramBot, { Message } from "node-telegram-bot-api";
-import startCommand from "./commands/start";
-import helpCommand from "./commands/help";
-import aboutCommand from "./commands/about";
-import messageHandler from "./handlers/messageHandler";
-import callbackHandler from "./handlers/callbackHandler";
-import photoHandler from "./handlers/photoHandler";
-import chekCommand from "./commands/chek";
-import addBalanceCommand from "./commands/addBalance";
-import { logger } from "../utils/logger";
+import startCommand from "./commands/start.js";
+import helpCommand from "./commands/help.js";
+import aboutCommand from "./commands/about.js";
+import messageHandler from "./handlers/messageHandler.js";
+import callbackHandler from "./handlers/callbackHandler.js";
+import photoHandler from "./handlers/photoHandler.js";
+import chekCommand from "./commands/chek.js";
+import addBalanceCommand from "./commands/addBalance.js";
+import { logger } from "../utils/logger.js";
 
 // Token borligini TypeScriptga aniq ko'rsatamiz
 const botToken = process.env.BOT_TOKEN;

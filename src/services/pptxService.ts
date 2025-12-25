@@ -1,6 +1,6 @@
 // src/services/pptxService.ts
-import { PresentationData } from "./aiService";
-import { logger } from "../utils/logger";
+import { PresentationData } from "./aiService.js";
+import { logger } from "../utils/logger.js";
 
 export interface PresentationOptions {
   topic: string;

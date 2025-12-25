@@ -1,14 +1,14 @@
 import TelegramBot from "node-telegram-bot-api";
-import Payment from "../../models/Payment";
-import { ADMIN_ID, PRESENTATION_COST } from "../../config";
-import User from "../../models/User";
-import { logger } from "../../utils/logger";
-import { formatAmount, formatNumber } from "../../utils/formatter";
-import { generatePresentation } from "../../services/aiService";
-import { generatePPTX } from "../../services/pptxService";
-import { getProgressMessage } from "../../utils/progressBar";
-import { deductBalance } from "../../services/balanceService";
-import { mainMenu } from "../keyboards/mainMenu";
+import Payment from "../../models/Payment.js";
+import { ADMIN_ID, PRESENTATION_COST } from "../../config/index.js";
+import User from "../../models/User.js";
+import { logger } from "../../utils/logger.js";
+import { formatAmount, formatNumber } from "../../utils/formatter.js";
+import { generatePresentation } from "../../services/aiService.js";
+import { generatePPTX } from "../../services/pptxService.js";
+import { getProgressMessage } from "../../utils/progressBar.js";
+import { deductBalance } from "../../services/balanceService.js";
+import { mainMenu } from "../keyboards/mainMenu.js";
 import fs from "fs";
 import path from "path";
 

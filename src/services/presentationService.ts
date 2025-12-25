@@ -1,6 +1,6 @@
 // src/services/presentationService.ts
-import { PresentationData } from "./aiService";
-import { logger } from "../utils/logger";
+import { PresentationData } from "./aiService.js";
+import { logger } from "../utils/logger.js";
 
 /**
  * Format presentation data into a readable text format for Telegram

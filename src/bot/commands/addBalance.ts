@@ -1,8 +1,8 @@
 import TelegramBot from "node-telegram-bot-api";
-import User from "../../models/User";
-import Payment from "../../models/Payment";
-import { ADMIN_ID } from "../../config";
-import { formatAmount } from "../../utils/formatter";
+import User from "../../models/User.js";
+import Payment from "../../models/Payment.js";
+import { ADMIN_ID } from "../../config/index.js";
+import { formatAmount } from "../../utils/formatter.js";
 
 export default function addBalanceCommand(bot: TelegramBot) {
   bot.onText(/\/addbalance (.+) (.+) (.+)/, async (msg, match) => {

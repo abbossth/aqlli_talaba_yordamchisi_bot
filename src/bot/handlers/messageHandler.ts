@@ -1,13 +1,13 @@
 import TelegramBot, { Message } from "node-telegram-bot-api";
-import User from "../../models/User";
-import { generatePresentation } from "../../services/aiService";
-import { deductBalance } from "../../services/balanceService";
-import { PRESENTATION_COST } from "../../config";
-import { logger } from "../../utils/logger";
-import { mainMenu } from "../keyboards/mainMenu";
-import { formatAmount } from "../../utils/formatter";
-import { generatePPTX } from "../../services/pptxService";
-import { getProgressMessage } from "../../utils/progressBar";
+import User from "../../models/User.js";
+import { generatePresentation } from "../../services/aiService.js";
+import { deductBalance } from "../../services/balanceService.js";
+import { PRESENTATION_COST } from "../../config/index.js";
+import { logger } from "../../utils/logger.js";
+import { mainMenu } from "../keyboards/mainMenu.js";
+import { formatAmount } from "../../utils/formatter.js";
+import { generatePPTX } from "../../services/pptxService.js";
+import { getProgressMessage } from "../../utils/progressBar.js";
 import fs from "fs";
 import path from "path";
 

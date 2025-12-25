@@ -2,12 +2,16 @@
   "name": "aqlli_talaba_yordamchisi_bot",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "start": "node dist/index.js",
-    "build": "tsc"
+    "build": "tsc",
+    "prebuild": "node -e \"require('fs').rmSync('dist', {recursive: true, force: true})\" || true"
   },
   "keywords": [],
   "author": "",

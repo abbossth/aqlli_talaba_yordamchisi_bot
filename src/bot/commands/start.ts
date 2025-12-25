@@ -1,9 +1,9 @@
 import TelegramBot from "node-telegram-bot-api";
-import User from "../../models/User";
-import { mainMenu } from "../keyboards/mainMenu";
-import { logger } from "../../utils/logger";
-import { PRESENTATION_COST } from "../../config";
-import { formatAmount } from "../../utils/formatter";
+import User from "../../models/User.js";
+import { mainMenu } from "../keyboards/mainMenu.js";
+import { logger } from "../../utils/logger.js";
+import { PRESENTATION_COST } from "../../config/index.js";
+import { formatAmount } from "../../utils/formatter.js";
 
 export default function startCommand(bot: TelegramBot) {
   bot.onText(/\/start(?: (.+))?/, async (msg, match) => {
