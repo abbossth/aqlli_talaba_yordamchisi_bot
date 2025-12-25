@@ -8,3 +8,6 @@ export const PRESENTATION_COST = Number(process.env.PRESENTATION_COST) || 100;
 export const PEXELS_API_KEY = process.env.PEXELS_API_KEY;
 export const REQUIRED_CHANNEL_ID = process.env.REQUIRED_CHANNEL_ID || "";
 export const REQUIRED_CHANNEL_USERNAME = process.env.REQUIRED_CHANNEL_USERNAME || "";
+
+// Channel for daily posts
+export const CHANNEL_ID = process.env.CHANNEL_ID || "";

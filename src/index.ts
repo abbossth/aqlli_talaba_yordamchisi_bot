@@ -2,7 +2,8 @@
 import "dotenv/config"; // .env faylidan token va URI o'qish
 import mongoose from "mongoose";
 import { logger } from "./utils/logger.js";
-import "./bot/bot.js";
+import bot from "./bot/bot.js";
+import { initChannelScheduler } from "./services/channelScheduler.js";
 
 // MongoDB ga ulanish
 const mongoUri = process.env.MONGO_URI!;
@@ -21,4 +22,6 @@ mongoose
   });
 
 logger.info("🤖 Bot ishga tushdi...");
-// Bot allaqachon src/bot/bot.ts da yaratildi va eksport qilindi
+
+// Initialize channel scheduler for daily posts
+initChannelScheduler(bot);

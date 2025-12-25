@@ -25,6 +25,9 @@ PEXELS_API_KEY=your_pexels_api_key
 REQUIRED_CHANNEL_ID=your_channel_id
 REQUIRED_CHANNEL_USERNAME=your_channel_username
 
+# Optional: Channel for daily posts (automatically posts 6 times per day)
+CHANNEL_ID=-1001234567890
+
 # Optional: Video tutorial IDs
 PRESENTATION_VIDEO_ID=your_presentation_video_file_id
 REFERAT_VIDEO_ID=your_referat_video_file_id
