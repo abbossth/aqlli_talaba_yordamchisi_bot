@@ -11,7 +11,7 @@ import { getProgressMessage } from "../../utils/progressBar.js";
 import fs from "fs";
 import path from "path";
 
-const BOT_USERNAME = process.env.BOT_USERNAME || "talaba_ai_bot";
+const BOT_USERNAME = process.env.BOT_USERNAME || "talaba_ai_robot";
 
 export default async function messageHandler(bot: TelegramBot, msg: Message) {
   const chatId = msg.chat.id;

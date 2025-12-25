@@ -12,7 +12,7 @@ import { mainMenu } from "../keyboards/mainMenu.js";
 import fs from "fs";
 import path from "path";
 
-const BOT_USERNAME = process.env.BOT_USERNAME || "talaba_ai_bot";
+const BOT_USERNAME = process.env.BOT_USERNAME || "talaba_ai_robot";
 
 const CARD = "8600 5304 0271 3039";
 const NAME_ON_CARD = "AXMEDOV ABBOSBEK";
