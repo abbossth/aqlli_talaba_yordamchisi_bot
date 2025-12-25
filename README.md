@@ -1,6 +1,6 @@
-# Aqlli Talaba Yordamchisi Bot
+# Talaba AI Bot
 
-Telegram bot - talabalar uchun professional taqdimotlar yaratish.
+Telegram bot - talabalar uchun professional taqdimotlar yaratish. Sun'iy intellekt yordamida referat, taqdimot, mustaqil ish va slaydlar tayyorlaydi.
 
 ## O'rnatish
 

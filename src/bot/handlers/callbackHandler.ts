@@ -12,7 +12,7 @@ import { mainMenu } from "../keyboards/mainMenu.js";
 import fs from "fs";
 import path from "path";
 
-const BOT_USERNAME = process.env.BOT_USERNAME || "aqlli_talaba_yordamchisi_Bot";
+const BOT_USERNAME = process.env.BOT_USERNAME || "talaba_ai_bot";
 
 const CARD = "8600 5304 0271 3039";
 const NAME_ON_CARD = "AXMEDOV ABBOSBEK";
@@ -35,7 +35,7 @@ export default async function callbackHandler(
 
     // Handle payment-related callbacks (available to all users)
     switch (data) {
-      case "payment":
+    case "payment":
         try {
           // Show amount selection buttons
           const amountButtons = [];
@@ -91,8 +91,8 @@ Quyidagi summalardan birini tanlang:`,
             user.action = `payment_amount:${amount}`;
             await user.save();
 
-            await bot.sendMessage(
-              chatId,
+      await bot.sendMessage(
+        chatId,
               `✅ *${formatAmount(amount)}* tanlandi.
 
 Quyidagi karta raqamiga to'lov qiling va chekni skrinshot qilib oling (COPY qilish uchun karta raqam ustiga bosing).
@@ -101,20 +101,20 @@ Quyidagi karta raqamiga to'lov qiling va chekni skrinshot qilib oling (COPY qili
 👤 ${NAME_ON_CARD}
 
 📸 To'lov chekini yuboring:`,
-              {
-                parse_mode: "Markdown",
-                reply_markup: {
-                  inline_keyboard: [
-                    [
-                      {
+        {
+          parse_mode: "Markdown",
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
                         text: "❌ Bekor qilish",
                         callback_data: "cancel_payment",
-                      },
-                    ],
-                  ],
                 },
-              }
-            );
+              ],
+            ],
+          },
+        }
+      );
             await bot.deleteMessage(chatId, query!.message!.message_id!);
           } catch (error: any) {
             logger.error("Error handling amount selection", error);
@@ -145,7 +145,7 @@ Quyidagi karta raqamiga to'lov qiling va chekni skrinshot qilib oling (COPY qili
           }
           return;
         }
-        break;
+      break;
     }
 
     // Handle template selection
@@ -490,7 +490,7 @@ Quyidagi karta raqamiga to'lov qiling va chekni skrinshot qilib oling (COPY qili
 🌐 Til: ${state.language}
 
 🤖 @${BOT_USERNAME}
-💡 Professional taqdimotlar yaratish uchun bizning botimizdan foydalaning!`;
+💡 Professional taqdimotlar yaratish uchun Talaba AI Bot dan foydalaning!`;
 
         await bot.sendDocument(chatId, filePath, {
           caption: caption,
@@ -581,18 +581,18 @@ Quyidagi karta raqamiga to'lov qiling va chekni skrinshot qilib oling (COPY qili
     }
 
     // Admin-only callbacks
-    if (chatId !== ADMIN_ID) {
-      return bot.sendMessage(chatId, "⛔ Bu tugma faqat admin uchun.");
-    }
+  if (chatId !== ADMIN_ID) {
+    return bot.sendMessage(chatId, "⛔ Bu tugma faqat admin uchun.");
+  }
 
-    // ✔️ Tasdiqlash
-    if (data.startsWith("approve_")) {
+  // ✔️ Tasdiqlash
+  if (data.startsWith("approve_")) {
       try {
-        const paymentId = data.replace("approve_", "");
+    const paymentId = data.replace("approve_", "");
         const messageId = query.message?.message_id;
         const chatIdForEdit = query.message?.chat.id;
 
-        const pay = await Payment.findById(paymentId);
+    const pay = await Payment.findById(paymentId);
         if (!pay) {
           return bot.sendMessage(ADMIN_ID, "❌ Payment topilmadi.");
         }
@@ -607,7 +607,7 @@ Quyidagi karta raqamiga to'lov qiling va chekni skrinshot qilib oling (COPY qili
           );
         }
 
-        const user = await User.findOne({ telegramId: pay.userId });
+    const user = await User.findOne({ telegramId: pay.userId });
         if (!user) {
           return bot.sendMessage(ADMIN_ID, "❌ User topilmadi.");
         }
@@ -619,11 +619,11 @@ Quyidagi karta raqamiga to'lov qiling va chekni skrinshot qilib oling (COPY qili
           return bot.sendMessage(ADMIN_ID, "❌ To'lov miqdori noto'g'ri.");
         }
 
-        user.balance += amount;
-        await user.save();
+    user.balance += amount;
+    await user.save();
 
-        pay.status = "approved";
-        await pay.save();
+    pay.status = "approved";
+    await pay.save();
 
         // Edit the original message to remove buttons and show approved status
         if (messageId && chatIdForEdit) {
@@ -646,7 +646,7 @@ ID: ${paymentId}
             logger.warn("Could not edit message", { error });
             // Fallback: send new message if edit fails
             await bot.sendMessage(
-              ADMIN_ID,
+      ADMIN_ID,
               `✅ To'lov tasdiqlandi.\n\n👤 ${user.name}\n💰 +${formatAmount(
                 amount
               )}\n💵 Yangi balans: ${formatAmount(user.balance)}`
@@ -656,7 +656,7 @@ ID: ${paymentId}
 
         try {
           await bot.sendMessage(
-            user.telegramId,
+      user.telegramId,
             `🎉 To'lovingiz tasdiqlandi! +${formatAmount(
               amount
             )} tushdi.\n\n💰 Yangi balansingiz: ${formatAmount(user.balance)}`
@@ -681,16 +681,16 @@ ID: ${paymentId}
         );
       }
       return;
-    }
+  }
 
-    // ❌ Bekor qilish
-    if (data.startsWith("reject_")) {
+  // ❌ Bekor qilish
+  if (data.startsWith("reject_")) {
       try {
-        const paymentId = data.replace("reject_", "");
+    const paymentId = data.replace("reject_", "");
         const messageId = query.message?.message_id;
         const chatIdForEdit = query.message?.chat.id;
 
-        const pay = await Payment.findById(paymentId);
+    const pay = await Payment.findById(paymentId);
 
         if (!pay) {
           return bot.sendMessage(ADMIN_ID, "❌ Payment topilmadi.");
@@ -706,8 +706,8 @@ ID: ${paymentId}
           );
         }
 
-        pay.status = "rejected";
-        await pay.save();
+    pay.status = "rejected";
+    await pay.save();
 
         // Get user info for the message
         const user = await User.findOne({ telegramId: pay.userId });

@@ -24,7 +24,7 @@ export async function generatePPTX(options: PresentationOptions): Promise<Buffer
 
     // Set presentation properties
     pptx.author = options.author;
-    pptx.company = "Aqlli Talaba Yordamchisi Bot";
+    pptx.company = "Talaba AI Bot";
     pptx.title = options.topic;
 
     // Template-based styling
