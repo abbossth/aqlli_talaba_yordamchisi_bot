@@ -88,3 +88,4 @@ export function createPresentationSummary(data: PresentationData): string {
   return `✅ *Taqdimot tayyorlandi!*\n\n📊 *${data.title}*\n📄 Slaydlar soni: ${data.slides.length}\n\nQuyidagi slaydlarni ko'rishingiz mumkin:`;
 }
 
+

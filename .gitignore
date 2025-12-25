@@ -4,3 +4,4 @@
 /venv
 /temp
 /dist
+*.log

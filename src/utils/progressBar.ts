@@ -21,3 +21,4 @@ export function getProgressMessage(step: number, total: number = 10): string {
   return `Slayd tayyorlanmoqda (3-5 daqiqa kuting)...\n\n${progressBar}`;
 }
 
+

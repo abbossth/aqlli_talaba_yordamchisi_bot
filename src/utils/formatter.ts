@@ -16,3 +16,4 @@ export function formatAmount(amount: number): string {
   return `${formatNumber(amount)} so'm`;
 }
 
+
