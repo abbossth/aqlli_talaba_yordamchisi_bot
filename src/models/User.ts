@@ -6,6 +6,7 @@ export interface IUser {
   balance: number;
   referredBy?: number | null;
   action?: string;
+  active?: boolean; // User active status for broadcast
   // Presentation creation state
   presentationState?: {
     topic?: string;
@@ -23,6 +24,7 @@ const userSchema = new Schema<IUser>(
     balance: { type: Number, default: 0 },
     referredBy: { type: Number, default: null },
     action: { type: String, default: "start" },
+    active: { type: Boolean, default: true },
     presentationState: {
       type: {
         topic: { type: String },

@@ -17,6 +17,17 @@ ADMIN_ID=your_telegram_user_id
 OPENAI_API_KEY=your_openai_api_key
 PRESENTATION_COST=100
 BOT_USERNAME=your_bot_username
+
+# Optional: Image service (for better presentations)
+PEXELS_API_KEY=your_pexels_api_key
+
+# Optional: Required channel subscription
+REQUIRED_CHANNEL_ID=your_channel_id
+REQUIRED_CHANNEL_USERNAME=your_channel_username
+
+# Optional: Video tutorial IDs
+PRESENTATION_VIDEO_ID=your_presentation_video_file_id
+REFERAT_VIDEO_ID=your_referat_video_file_id
 ```
 
 3. **Build qilish:**

@@ -9,6 +9,8 @@ import { generatePPTX } from "../../services/pptxService.js";
 import { getProgressMessage } from "../../utils/progressBar.js";
 import { deductBalance } from "../../services/balanceService.js";
 import { mainMenu } from "../keyboards/mainMenu.js";
+import { checkSubscription, getSubscriptionMessage } from "../../utils/subscriptionCheck.js";
+import { handleBroadcastCallback } from "../commands/broadcast.js";
 import fs from "fs";
 import path from "path";
 
@@ -29,6 +31,83 @@ export default async function callbackHandler(
   const chatId = query.message!.chat.id;
   const data = query.data!;
   const userId = query.from?.id;
+
+  // Handle broadcast callbacks first
+  if (data?.startsWith("broadcast_")) {
+    try {
+      await handleBroadcastCallback(bot, query);
+    } catch (error: any) {
+      logger.error("Error in broadcast callback handler", error);
+    }
+    return;
+  }
+
+  // Handle subscription check
+  if (data === "check_subscription") {
+    try {
+      const isSubscribed = await checkSubscription(bot, userId!);
+      
+      if (isSubscribed) {
+        await bot.answerCallbackQuery(query.id, { text: "✅ Obuna tasdiqlandi!" });
+        await bot.deleteMessage(chatId, query.message!.message_id!);
+        
+        // Send welcome message
+        const user = await User.findOne({ telegramId: userId! });
+        const name = user?.name || query.from.first_name || "Foydalanuvchi";
+        
+        await bot.sendMessage(
+          chatId,
+          `Assalomu alaykum, ${name}! 👋
+
+📌 Botimiz yordamida REFERAT, TAQDIMOT, MUSTAQIL ISH, SLAYD tayorlashingiz mumkin.
+
+✨ *Qanday ishlaydi:*
+1️⃣ "📊 Taqdimot yaratish" tugmasini bosing
+2️⃣ Mavzuni yuboring
+3️⃣ Professional taqdimot oling!
+
+💰 *Narx:* ${formatAmount(PRESENTATION_COST)} har bir taqdimot uchun
+
+📘 Qo'llanma - botdan qanday foydalanish haqida ma'lumot.
+/vid - 📕 Taqdimot (Slayd) video qo'llanma
+/video - 📘 Referat/Mustaqil ish video qo'llanma`,
+          { parse_mode: "Markdown", ...mainMenu }
+        );
+      } else {
+        await bot.answerCallbackQuery(query.id, { text: "❌ Kanalga obuna bo'lmadingiz!" });
+        const subscriptionMsg = getSubscriptionMessage();
+        if (subscriptionMsg) {
+          const channelUsername = process.env.REQUIRED_CHANNEL_USERNAME || "";
+          await bot.editMessageText(subscriptionMsg, {
+            chat_id: chatId,
+            message_id: query.message!.message_id!,
+            parse_mode: "Markdown",
+            reply_markup: {
+              inline_keyboard: [
+                [
+                  {
+                    text: "📢 Kanalga o'tish",
+                    url: channelUsername ? `https://t.me/${channelUsername}` : undefined,
+                  },
+                ],
+                [
+                  {
+                    text: "✅ Obuna bo'ldim",
+                    callback_data: "check_subscription",
+                  },
+                ],
+              ],
+            },
+          });
+        }
+      }
+      return;
+    } catch (error: any) {
+      logger.error("Error checking subscription", error);
+      await bot.answerCallbackQuery(query.id, { text: "❌ Xatolik yuz berdi!" });
+      return;
+    }
+  }
 
   try {
     await bot.answerCallbackQuery(query.id);
@@ -146,6 +225,47 @@ Quyidagi karta raqamiga to'lov qiling va chekni skrinshot qilib oling (COPY qili
           return;
         }
       break;
+    }
+
+    // Handle skip author
+    if (data === "skip_author") {
+      try {
+        if (!userId) {
+          return bot.sendMessage(chatId, "❌ Xatolik yuz berdi.");
+        }
+
+        const user = await User.findOne({ telegramId: userId });
+        if (!user || !user.presentationState) {
+          return bot.sendMessage(
+            chatId,
+            "❌ Xatolik yuz berdi. /start buyrug'ini bosing."
+          );
+        }
+
+        // Set default author name
+        user.presentationState.author = "Talaba AI Bot";
+        user.action = "waiting_for_pages";
+        await user.save();
+
+        await bot.answerCallbackQuery(query.id, { text: "✅ Muallif o'tkazib yuborildi" });
+        await bot.deleteMessage(chatId, query.message!.message_id!);
+
+        return bot.sendMessage(
+          chatId,
+          `✅ Muallif: *Talaba AI Bot*
+
+🧮 Endi *taqdimot sahifalar sonini* kiritishingizni so'raymiz.
+
+📄 Sahifalar soni: *4-16* orasida bo'lishi kerak.
+
+Raqam yuboring (masalan: 8, 10, 12):`,
+          { parse_mode: "Markdown" }
+        );
+      } catch (error: any) {
+        logger.error("Error skipping author", error);
+        await bot.answerCallbackQuery(query.id, { text: "❌ Xatolik yuz berdi!" });
+      }
+      return;
     }
 
     // Handle template selection

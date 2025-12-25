@@ -3,6 +3,10 @@ import TelegramBot, { Message } from "node-telegram-bot-api";
 import startCommand from "./commands/start.js";
 import helpCommand from "./commands/help.js";
 import aboutCommand from "./commands/about.js";
+import vidCommand from "./commands/vid.js";
+import videoCommand from "./commands/video.js";
+import broadcastCommand, { handleBroadcastCallback } from "./commands/broadcast.js";
+import statsCommand from "./commands/stats.js";
 import messageHandler from "./handlers/messageHandler.js";
 import callbackHandler from "./handlers/callbackHandler.js";
 import photoHandler from "./handlers/photoHandler.js";
@@ -23,10 +27,14 @@ const bot = new TelegramBot(botToken, {
   polling: true,
 });
 
-// --- Komandalarni ro‘yxatdan o‘tkazamiz ---
+// --- Komandalarni ro'yxatdan o'tkazamiz ---
 startCommand(bot);
 helpCommand(bot);
 aboutCommand(bot);
+vidCommand(bot);
+videoCommand(bot);
+broadcastCommand(bot);
+statsCommand(bot);
 chekCommand(bot);
 addBalanceCommand(bot);
 

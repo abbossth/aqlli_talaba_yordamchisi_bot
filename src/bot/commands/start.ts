@@ -4,6 +4,7 @@ import { mainMenu } from "../keyboards/mainMenu.js";
 import { logger } from "../../utils/logger.js";
 import { PRESENTATION_COST } from "../../config/index.js";
 import { formatAmount } from "../../utils/formatter.js";
+import { checkSubscription, getSubscriptionMessage } from "../../utils/subscriptionCheck.js";
 
 export default function startCommand(bot: TelegramBot) {
   bot.onText(/\/start(?: (.+))?/, async (msg, match) => {
@@ -43,6 +44,39 @@ export default function startCommand(bot: TelegramBot) {
         );
       }
 
+      // Check subscription
+      const isSubscribed = await checkSubscription(bot, userId);
+      
+      if (!isSubscribed) {
+        const subscriptionMsg = getSubscriptionMessage();
+        if (subscriptionMsg) {
+          const channelUsername = process.env.REQUIRED_CHANNEL_USERNAME || "";
+          return bot.sendMessage(
+            chatId,
+            subscriptionMsg,
+            {
+              parse_mode: "Markdown",
+              reply_markup: {
+                inline_keyboard: [
+                  [
+                    {
+                      text: "📢 Kanalga o'tish",
+                      url: channelUsername ? `https://t.me/${channelUsername}` : undefined,
+                    },
+                  ],
+                  [
+                    {
+                      text: "✅ Obuna bo'ldim",
+                      callback_data: "check_subscription",
+                    },
+                  ],
+                ],
+              },
+            }
+          );
+        }
+      }
+
       await bot.sendMessage(
         chatId,
         `Assalomu alaykum, ${name}! 👋
@@ -56,7 +90,9 @@ export default function startCommand(bot: TelegramBot) {
 
 💰 *Narx:* ${formatAmount(PRESENTATION_COST)} har bir taqdimot uchun
 
-📘 Qo'llanma - botdan qanday foydalanish haqida ma'lumot.`,
+📘 Qo'llanma - botdan qanday foydalanish haqida ma'lumot.
+/vid - 📕 Taqdimot (Slayd) video qo'llanma
+/video - 📘 Referat/Mustaqil ish video qo'llanma`,
         { parse_mode: "Markdown", ...mainMenu }
       );
     } catch (error: any) {

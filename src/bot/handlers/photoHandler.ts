@@ -12,6 +12,9 @@ export default async function photoHandler(bot: TelegramBot, msg: Message) {
   const chatId = msg.chat.id;
 
   try {
+    // Broadcast handler will check if it's admin and broadcast photo
+    // We only handle payment photos here
+    
     const user = await User.findOne({ telegramId: userId });
     if (!user) {
       logger.warn("Photo received from unknown user", { userId });

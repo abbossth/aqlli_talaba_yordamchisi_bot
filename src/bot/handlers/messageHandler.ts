@@ -2,12 +2,13 @@ import TelegramBot, { Message } from "node-telegram-bot-api";
 import User from "../../models/User.js";
 import { generatePresentation } from "../../services/aiService.js";
 import { deductBalance } from "../../services/balanceService.js";
-import { PRESENTATION_COST } from "../../config/index.js";
+import { PRESENTATION_COST, ADMIN_ID } from "../../config/index.js";
 import { logger } from "../../utils/logger.js";
 import { mainMenu } from "../keyboards/mainMenu.js";
 import { formatAmount } from "../../utils/formatter.js";
 import { generatePPTX } from "../../services/pptxService.js";
 import { getProgressMessage } from "../../utils/progressBar.js";
+import { checkSubscription, getSubscriptionMessage } from "../../utils/subscriptionCheck.js";
 import fs from "fs";
 import path from "path";
 
@@ -71,6 +72,39 @@ Botdan foydalanish juda oson:
     }
 
     if (text === "📊 Taqdimot yaratish") {
+      // Check subscription before allowing presentation creation
+      const isSubscribed = await checkSubscription(bot, userId);
+      
+      if (!isSubscribed) {
+        const subscriptionMsg = getSubscriptionMessage();
+        if (subscriptionMsg) {
+          const channelUsername = process.env.REQUIRED_CHANNEL_USERNAME || "";
+          return bot.sendMessage(
+            chatId,
+            subscriptionMsg,
+            {
+              parse_mode: "Markdown",
+              reply_markup: {
+                inline_keyboard: [
+                  [
+                    {
+                      text: "📢 Kanalga o'tish",
+                      url: channelUsername ? `https://t.me/${channelUsername}` : undefined,
+                    },
+                  ],
+                  [
+                    {
+                      text: "✅ Obuna bo'ldim",
+                      callback_data: "check_subscription",
+                    },
+                  ],
+                ],
+              },
+            }
+          );
+        }
+      }
+
       // Initialize presentation state
       user.action = "waiting_for_topic";
       user.presentationState = {};
@@ -122,7 +156,19 @@ Iltimos, mavzuni *to'liq, bexato va tushunarli* xolatda yuboring.
 🧑‍🎓 Endi taqdimot uchun *muallif ism-familiyasini* to'liq kiritishingizni so'raymiz.
 
 Misol: "Axmedov Abbosbek" yoki "Ivanov Ivan Petrovich"`,
-        { parse_mode: "Markdown" }
+        { 
+          parse_mode: "Markdown",
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "⏭️ Ismsiz davom ettirish",
+                  callback_data: "skip_author",
+                },
+              ],
+            ],
+          },
+        }
       );
     }
 
@@ -173,14 +219,27 @@ Raqam yuboring (masalan: 8, 10, 12):`,
 
 📐 Endi *shablon* tanlang:
 
-Quyidagi shablonlardan birini tanlang:`,
+Quyidagi shablonlardan birini tanlang:
+
+1️⃣ *Klassik ko'k* - Gradient dizayn
+2️⃣ *Tabiiy yashil* - Markazlashgan dizayn  
+3️⃣ *Zamonaviy pushti* - Minimal dizayn
+4️⃣ *Javobgar to'q sariq* - Qalin dizayn
+5️⃣ *Elegant binafsha* - Gradient minimal`,
         {
           parse_mode: "Markdown",
           reply_markup: {
             inline_keyboard: [
               [
-                { text: "1️⃣ Shablon 1", callback_data: `select_template_1` },
-                { text: "2️⃣ Shablon 2", callback_data: `select_template_2` },
+                { text: "1️⃣ Klassik ko'k", callback_data: `select_template_1` },
+                { text: "2️⃣ Tabiiy yashil", callback_data: `select_template_2` },
+              ],
+              [
+                { text: "3️⃣ Zamonaviy pushti", callback_data: `select_template_3` },
+                { text: "4️⃣ Javobgar to'q sariq", callback_data: `select_template_4` },
+              ],
+              [
+                { text: "5️⃣ Elegant binafsha", callback_data: `select_template_5` },
               ],
             ],
           },
