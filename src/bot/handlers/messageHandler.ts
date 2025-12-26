@@ -2,7 +2,7 @@ import TelegramBot, { Message } from "node-telegram-bot-api";
 import User from "../../models/User.js";
 import { generatePresentation } from "../../services/aiService.js";
 import { deductBalance } from "../../services/balanceService.js";
-import { PRESENTATION_COST, ADMIN_ID } from "../../config/index.js";
+import { PRESENTATION_COST, ADMIN_ID, REFERRAL_BONUS } from "../../config/index.js";
 import { logger } from "../../utils/logger.js";
 import { mainMenu } from "../keyboards/mainMenu.js";
 import { formatAmount } from "../../utils/formatter.js";
@@ -44,30 +44,54 @@ export default async function messageHandler(bot: TelegramBot, msg: Message) {
     }
 
     if (text === "📘 Qo'llanma") {
-      return bot.sendMessage(
+      const { GUIDE_PAGES, getGuideKeyboard } = await import("../../utils/guideMessages.js");
+      
+      await bot.sendMessage(
         chatId,
-        `📘 *Qo'llanma*
-
-Botdan foydalanish juda oson:
-
-1️⃣ "📊 Taqdimot yaratish" tugmasini bosing
-2️⃣ Mavzuni to'liq va tushunarli yuboring
-3️⃣ Muallif ism-familiyasini kiriting
-4️⃣ Sahifalar sonini tanlang (4-16)
-5️⃣ Shablon va tilni tanlang
-6️⃣ Professional taqdimot oling!
-
-💡 *Maslahat:* Mavzuni aniq va to'liq yozing.
-
-💰 *Narx:* ${formatAmount(PRESENTATION_COST)} har bir taqdimot uchun`,
-        { parse_mode: "Markdown" }
+        GUIDE_PAGES[0].text,
+        {
+          parse_mode: "Markdown",
+          ...getGuideKeyboard(0),
+        }
       );
+      return;
     }
 
     if (text === "🎁 Referal havola") {
       return bot.sendMessage(
         chatId,
-        `🔗 Sizning referal havolangiz:\nhttps://t.me/${BOT_USERNAME}?start=${user.telegramId}`
+        `🎁 *Referal Tizimi*
+
+🔗 *Sizning referal havolangiz:*
+\`https://t.me/${BOT_USERNAME}?start=${user.telegramId}\`
+
+💎 *Qanday Ishlaydi:*
+
+1️⃣ Havolani do'stlaringizga yuboring
+2️⃣ Do'stingiz botni bosib, /start buyrug'ini bosing
+3️⃣ Do'stingiz botdan foydalanishni boshlagach, sizga avtomatik ${formatAmount(REFERRAL_BONUS)} mukofot puli qo'shiladi!
+
+💰 *Afzalliklari:*
+✅ Har bir taklif qilingan do'st uchun ${formatAmount(REFERRAL_BONUS)} mukofot
+✅ Cheksiz do'stlarni taklif qilishingiz mumkin
+✅ Mukofot puli darhol balansingizga qo'shiladi
+✅ Do'stingiz ham ${formatAmount(8000)} boshlang'ich balans bilan boshlaydi
+
+📤 *Havolani yuborish:*
+Havolani nusxalab, do'stlaringizga yuboring yoki Telegram orqali ulashib yuboring!`,
+        { 
+          parse_mode: "Markdown",
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "📋 Havolani nusxalash",
+                  url: `https://t.me/${BOT_USERNAME}?start=${user.telegramId}`,
+                },
+              ],
+            ],
+          },
+        }
       );
     }
 
@@ -122,7 +146,19 @@ Iltimos, mavzuni *to'liq, bexato va tushunarli* xolatda yuboring.
 • Yoki: "Global iqlim o'zgarishi: sabablari va oqibatlari"
 
 💰 Narx: ${formatAmount(PRESENTATION_COST)}`,
-        { parse_mode: "Markdown" }
+        { 
+          parse_mode: "Markdown",
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "⏭️ Ismsiz davom ettirish",
+                  callback_data: "skip_author",
+                },
+              ],
+            ],
+          },
+        }
       );
     }
 

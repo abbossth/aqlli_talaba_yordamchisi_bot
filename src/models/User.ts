@@ -21,7 +21,7 @@ const userSchema = new Schema<IUser>(
   {
     telegramId: { type: Number, unique: true, required: true },
     name: { type: String, required: true },
-    balance: { type: Number, default: 0 },
+    balance: { type: Number, default: 8000 },
     referredBy: { type: Number, default: null },
     action: { type: String, default: "start" },
     active: { type: Boolean, default: true },

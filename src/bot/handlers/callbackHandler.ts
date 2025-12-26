@@ -42,6 +42,36 @@ export default async function callbackHandler(
     return;
   }
 
+  // Handle guide navigation
+  if (data?.startsWith("guide_")) {
+    try {
+      const { GUIDE_PAGES, getGuideKeyboard } = await import("../../utils/guideMessages.js");
+      
+      let pageIndex = 0;
+      if (data.startsWith("guide_next_")) {
+        pageIndex = parseInt(data.replace("guide_next_", "")) + 1;
+      } else if (data.startsWith("guide_prev_")) {
+        pageIndex = parseInt(data.replace("guide_prev_", "")) - 1;
+      }
+
+      if (pageIndex < 0) pageIndex = 0;
+      if (pageIndex >= GUIDE_PAGES.length) pageIndex = GUIDE_PAGES.length - 1;
+
+      await bot.answerCallbackQuery(query.id);
+      
+      await bot.editMessageText(GUIDE_PAGES[pageIndex].text, {
+        chat_id: chatId,
+        message_id: query.message!.message_id!,
+        parse_mode: "Markdown",
+        ...getGuideKeyboard(pageIndex),
+      });
+    } catch (error: any) {
+      logger.error("Error handling guide navigation", error);
+      await bot.answerCallbackQuery(query.id, { text: "❌ Xatolik yuz berdi!" });
+    }
+    return;
+  }
+
   // Handle subscription check
   if (data === "check_subscription") {
     try {
@@ -609,7 +639,7 @@ Raqam yuboring (masalan: 8, 10, 12):`,
 📐 Shablon: ${state.template}
 🌐 Til: ${state.language}
 
-🤖 @${BOT_USERNAME}
+🤖 @${BOT_USERNAME.replace(/_/g, '\\_')}
 💡 Professional taqdimotlar yaratish uchun Talaba AI Bot dan foydalaning!`;
 
         await bot.sendDocument(chatId, filePath, {

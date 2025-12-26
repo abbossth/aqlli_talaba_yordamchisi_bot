@@ -11,3 +11,9 @@ export const REQUIRED_CHANNEL_USERNAME = process.env.REQUIRED_CHANNEL_USERNAME |
 
 // Channel for daily posts
 export const CHANNEL_ID = process.env.CHANNEL_ID || "";
+
+// Referral bonus amount
+export const REFERRAL_BONUS = 2000;
+
+// Initial balance for new users
+export const INITIAL_BALANCE = 8000;
